@@ -1,27 +1,45 @@
 package com.motiontracker.core.di
 
+import com.motiontracker.features.dashboard.data.FakeDashboardRepository
+import com.motiontracker.features.dashboard.domain.DashboardRepository
+import com.motiontracker.features.dashboard.domain.GetDashboardSummaryUseCase
+import com.motiontracker.features.dashboard.presentation.DashboardViewModel
+import com.motiontracker.features.history.data.FakeWorkoutHistoryRepository
+import com.motiontracker.features.history.domain.GetWorkoutHistoryUseCase
+import com.motiontracker.features.history.domain.WorkoutHistoryRepository
+import com.motiontracker.features.history.presentation.HistoryViewModel
+import com.motiontracker.features.settings.presentation.SettingsViewModel
+import com.motiontracker.features.workout.data.FakeWorkoutRepository
+import com.motiontracker.features.workout.domain.WorkoutRepository
+import com.motiontracker.features.workout.presentation.WorkoutViewModel
 import org.koin.core.context.startKoin
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    // Repositories will be added here
+    single<DashboardRepository> { FakeDashboardRepository() }
+    single<WorkoutHistoryRepository> { FakeWorkoutHistoryRepository() }
+    single<WorkoutRepository> { FakeWorkoutRepository() }
 }
 
 val useCaseModule = module {
-    // Use cases will be added here
+    factoryOf(::GetDashboardSummaryUseCase)
+    factoryOf(::GetWorkoutHistoryUseCase)
 }
 
 val viewModelModule = module {
-    // ViewModels will be added here
+    viewModelOf(::DashboardViewModel)
+    viewModelOf(::HistoryViewModel)
+    viewModelOf(::WorkoutViewModel)
+    viewModelOf(::SettingsViewModel)
 }
 
 val networkModule = module {
-    // Ktor client will be added here
 }
 
 val databaseModule = module {
-    // SQLDelight database will be added here
 }
 
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
